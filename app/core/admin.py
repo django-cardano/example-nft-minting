@@ -15,8 +15,7 @@ Wallet = get_wallet_model()
 
 @admin.register(Wallet)
 class WalletAdmin(admin.ModelAdmin):
-    list_display = ('name', 'payment_address', 'id',)
-    fields = ('name',)
+    list_display = ('name', 'payment_address', 'creator', 'id',)
 
     def get_form(self, request, obj=None, **kwargs):
         if not obj:
@@ -26,5 +25,17 @@ class WalletAdmin(admin.ModelAdmin):
     def get_fields(self, request, obj=None):
         if not obj:
             return ('name', 'password',)
+        return ('name',)
 
-        return super().get_fields(request, obj)
+    def save_form(self, request, form, change):
+        """
+        Given a ModelForm return an unsaved instance. ``change`` is True if
+        the object is being changed, and False if it's being added.
+        """
+        wallet = form.save(commit=False)
+
+        if not change:
+            wallet.generate_keys(form.cleaned_data['password'])
+            wallet.creator = request.user
+
+        return wallet

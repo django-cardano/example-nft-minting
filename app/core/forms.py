@@ -1,8 +1,6 @@
 from django import forms
 
-from django_cardano.models import (
-    get_wallet_model,
-)
+from django_cardano.models import get_wallet_model
 
 Wallet = get_wallet_model()
 
@@ -16,10 +14,3 @@ class WalletCreateForm(forms.ModelForm):
     class Meta:
         model = Wallet
         fields = ('name', 'password',)
-
-    def save(self, commit=True):
-        new_wallet = super().save(commit)
-
-        new_wallet.generate_keys(self.cleaned_data['password'])
-
-        return new_wallet
