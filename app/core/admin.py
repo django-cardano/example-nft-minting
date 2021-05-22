@@ -15,7 +15,8 @@ Wallet = get_wallet_model()
 
 @admin.register(Wallet)
 class WalletAdmin(admin.ModelAdmin):
-    list_display = ('name', 'payment_address', 'creator', 'id',)
+    list_display = ('name', 'payment_address', 'lovelace_balance',)
+    search_fields = ('name', 'payment_address',)
 
     def get_form(self, request, obj=None, **kwargs):
         if not obj:

@@ -7,6 +7,11 @@ from django_cardano.models import (
     AbstractWallet,
 )
 
+from django_cardano.settings import django_cardano_settings
+from django_cardano.shortcuts import filter_utxos
+
+lovelace_unit = django_cardano_settings.LOVELACE_UNIT
+
 
 # Swap these classes initially so they may be easily extended later if necessary
 class MintingPolicy(AbstractMintingPolicy):
@@ -19,6 +24,11 @@ class Transaction(AbstractTransaction):
 
 class Wallet(AbstractWallet):
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+
+    @property
+    def lovelace_balance(self):
+        lovelace_utxos = filter_utxos(self.utxos, type=lovelace_unit)
+        return sum([utxo['Tokens'][lovelace_unit] for utxo in lovelace_utxos])
 
 
 # -----------------------------------------------------------------------------
