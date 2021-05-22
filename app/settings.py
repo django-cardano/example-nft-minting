@@ -6,7 +6,6 @@ PROJECT_PATH = Path(__file__).resolve().parent
 ROOT_PATH = PROJECT_PATH.parent
 
 DATA_PATH = ROOT_PATH / 'data'
-TEMPLATES_PATH = PROJECT_PATH / 'templates'
 
 load_dotenv(ROOT_PATH / '.env')
 
@@ -48,7 +47,9 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATES_PATH],
+        'DIRS': [
+            PROJECT_PATH / 'templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -93,6 +94,9 @@ MEDIA_ROOT = PROJECT_PATH / 'media'
 MEDIA_URL = '/media/'
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    PROJECT_PATH / 'static'
+]
 
 # ------------------------------------------------------------------------------
 DJANGO_CARDANO = {
