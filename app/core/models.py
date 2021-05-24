@@ -13,7 +13,7 @@ from django_cardano.shortcuts import filter_utxos
 lovelace_unit = django_cardano_settings.LOVELACE_UNIT
 
 
-# Swap these classes initially so they may be easily extended later if necessary
+# Introduce these classes initially so they may be easily extended later if need be
 class MintingPolicy(AbstractMintingPolicy):
     pass
 
@@ -28,10 +28,14 @@ class Wallet(AbstractWallet):
     @property
     def lovelace_balance(self):
         lovelace_utxos = filter_utxos(self.utxos, type=lovelace_unit)
-        return sum([utxo['Tokens'][lovelace_unit] for utxo in lovelace_utxos])
+        lovelace_balanace = sum([utxo['Tokens'][lovelace_unit] for utxo in lovelace_utxos])
+        return lovelace_balanace if lovelace_balanace else 0
+
+    @property
+    def ada_balance(self):
+        return self.lovelace_balance / 1000000
 
 
-# -----------------------------------------------------------------------------
 class Asset(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+  <header class="py-8 bg-gray-100">
+    <div class="
+      max-w-5xl mx-auto px-4 sm:px-6 lg:px-8
+      flex items-center
+    ">
+      <img
+        alt="{{ wallet.payment_address }}"
+        class="w-16 h-16 mr-4"
+        src="{% static 'images/wallet.svg' %}"
+      />
+
+      <div class="flex-grow">
+        <h1 class="text-3xl text-gray-900 font-semibold tracking-wide uppercase">
+          {{ wallet.name }}
+        </h1>
+
+        <p class="text-base text-gray-900">
+          ₳{{ wallet.ada_balance|floatformat:6 }}
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <form method="post" class="my-8">
+      {% csrf_token %}
+      {{ send_ada_form }}
+      <button
+        type="submit"
+        class="
+          w-full inline-flex justify-center rounded-md border border-transparent shadow-sm
+          px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700
+          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3
+          sm:w-auto sm:text-sm
+        ">
+        Send ADA
+      </button>
+    </form>
+  </main>
+{% endblock %}
