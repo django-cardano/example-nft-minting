@@ -7,25 +7,64 @@
   <title>Example NFT Minting</title>
 
   {% block style %}
-    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@next/dist/base.min.css">
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/tailwindcss@next/dist/base.min.css">
     <link rel="stylesheet" type="text/css" href="{% static "css/forms.min.css" %}">
-    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@next/dist/components.min.css" />
-    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@next/dist/utilities.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/tailwindcss@next/dist/components.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/tailwindcss@next/dist/utilities.min.css" />
   {% endblock %}
+
+  {% block head_scripts %}
+    <script src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+  {% endblock head_scripts %}
 </head>
 
 <body>
-{% if messages %}
-  <div>
-    <ul class="messages">
-      {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-      {% endfor %}
-    </ul>
+<div class="bg-blue-400">
+  <div class="max-w-5xl mx-auto px-2 flex">
+    <nav class="flex">
+
+      <a
+        href="{% url 'wallet.list' %}"
+        class="inline-block px-4 py-3 text-white hover:underline"
+      >
+        Wallets
+      </a>
+
+      <a
+        href="#"
+        class="inline-block px-4 py-3 text-white hover:underline"
+      >
+        Assets
+      </a>
+    </nav>
   </div>
-{% endif %}
+</div>
 
 {% block body %}
+
+
 {% endblock body %}
+
+<footer class="fixed left-0 right-0 bottom-0 bg-gray-200">
+  <div class="max-w-5xl mx-auto px-2 py-4 flex">
+    <dl class="text-sm flex">
+      <dt class="font-semibold mr-1">Epoch:</dt>
+      <dd id="tip-epoch">---</dd>
+      <dt class="font-semibold mr-1 ml-4">Block:</dt>
+      <dd id="tip-block">---</dd>
+      <dt class="font-semibold mr-1 ml-4">Slot:</dt>
+      <dd id="tip-slot">---</dd>
+    </dl>
+  </div>
+</footer>
+
+{% block body_scripts %}
+  <script type="text/javascript">
+    var queryTipUrl = "{% url 'query.tip' %}";
+  </script>
+
+  <script src="{% static 'js/base.js' %}"></script>
+{% endblock body_scripts %}
+
 </body>
 </html>

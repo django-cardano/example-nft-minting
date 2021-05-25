@@ -1,18 +1,20 @@
-from django.http import Http404
-from django.utils.translation import gettext as _
-
+from django.http import Http404, HttpResponseBadRequest
+from django.http import JsonResponse
 from django.views.generic import (
+    View,
     DetailView,
     FormView,
     ListView,
 )
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from django_cardano.exceptions import CardanoError
 from django_cardano.models import (
     get_transaction_model,
     get_wallet_model,
 )
+from django_cardano.util import CardanoUtils
 
 from .forms import TransferADAForm
 
@@ -42,17 +44,33 @@ class WalletDetailView(FormView):
         form_data = form.cleaned_data
 
         wallet = Wallet.objects.get(pk=self.kwargs['pk'])
-        try:
-            self.transaction = wallet.send_lovelace(
-                to_address=form_data['address'],
-                quantity=form_data['amount'],
-                password=form_data['password']
-            )
-        except CardanoError as e:
-            form.add_error(None, str(e))
-            return self.form_invalid(form)
+        to_address = form_data['address']
+        quantity = form_data['quantity']
+        spending_password = form_data['password']
 
-        return super().form_valid(form)
+        if spending_password:
+            try:
+                self.transaction = wallet.send_lovelace(
+                    to_address=to_address,
+                    quantity=quantity,
+                    password=spending_password
+                )
+            except CardanoError as e:
+                form.add_error(None, str(e))
+                return self.form_invalid(form)
+
+            return super().form_valid(form)
+        else:
+            try:
+                transaction = wallet.send_lovelace(
+                    to_address=to_address,
+                    quantity=quantity,
+                )
+                tx_fee = transaction.calculate_min_fee()
+                return JsonResponse({'fee': tx_fee})
+            except CardanoError as e:
+                return JsonResponse({'error': str(e)}, status=400)
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -70,3 +88,8 @@ class TransactionDetailView(DetailView):
             return self.get_queryset().get(tx_id=self.kwargs.get('tx_id'))
         except Transaction.DoesNotExist:
             raise Http404(_("No transaction found matching the query"))
+
+
+class QueryTipView(View):
+    def get(self, request, *args, **kwargs):
+        return JsonResponse(CardanoUtils.query_tip())
