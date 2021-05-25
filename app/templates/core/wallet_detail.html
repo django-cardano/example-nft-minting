@@ -61,11 +61,13 @@
           <tbody>
             {% for utxo in wallet.utxos %}
               <tr>
-                <td class="px-4 py-2 text-sm break-all">
+                <td class="px-4 py-2 text-sm break-all align-top">
                   {{ utxo.TxHash }}
                 </td>
-                <td class="p-2 text-sm">{{ utxo.TxIx }}</td>
-                <td class="p-2 text-sm">
+                <td class="p-2 text-sm align-top">
+                  {{ utxo.TxIx }}
+                </td>
+                <td class="p-2 text-sm align-top">
                   {{ utxo.Tokens.lovelace|toada|floatformat:6 }}
                 </td>
               </tr>
