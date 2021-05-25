@@ -89,6 +89,7 @@ class WalletDetailView(FormView):
 
 class TransactionDetailView(DetailView):
     model = Transaction
+    template_name = 'core/transaction_detail.html'
 
     def get_object(self, queryset=None):
         try:
