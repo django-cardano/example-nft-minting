@@ -9,8 +9,6 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-SUPERUSER_PASSWORD = '&jj;<#PX2+zyY_Z^'
-
 
 class Command(BaseCommand):
     """
@@ -26,7 +24,6 @@ class Command(BaseCommand):
             os.remove(db_path)
 
         Path(db_path).touch()
-
 
     def rebuild_initial_migrations(self):
         print("---------- REBUILDING INITIAL MIGRATION ----------")
@@ -49,7 +46,7 @@ class Command(BaseCommand):
         print("Performing initial migration:")
         management.call_command('migrate')
 
-    def seed_users(self):
+    def seed_users(self, superuser_password):
         print("Initializing site:")
 
         print("---------- SEEDING DATABASE ----------")
@@ -60,11 +57,16 @@ class Command(BaseCommand):
                 User.USERNAME_FIELD: admin_info[0],
                 User.EMAIL_FIELD: admin_info[1],
                 'first_name': admin_info[0],
-                'password': SUPERUSER_PASSWORD,
+                'password': superuser_password,
             })
+
+    def add_arguments(self, parser):
+        parser.add_argument('--password', type=str)
 
     def handle(self, *args, **options):
         self.flush_database()
         self.rebuild_initial_migrations()
         self.initialize_database()
-        self.seed_users()
+
+        superuser_password = options.get('password', 'admin')
+        self.seed_users(superuser_password)

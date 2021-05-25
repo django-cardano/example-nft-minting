@@ -3,7 +3,7 @@
 
 {% block body %}
   <main>
-    <div class="max-w-5xl mx-auto px-4 my-6 text-center">
+    <header class="max-w-5xl mx-auto px-4 my-6 text-center">
       <h1 class="text-3xl text-gray-900 font-semibold tracking-wide uppercase">
         Transaction Submitted
       </h1>
@@ -16,8 +16,10 @@
       >
         {{ transaction.tx_id }}
       </a>
+    </header>
 
+    <div class="max-w-5xl mx-auto px-4 text-xs break-all">
+      <pre>{{ transaction.tx_info }}</pre>
     </div>
-
   </main>
 {% endblock %}
