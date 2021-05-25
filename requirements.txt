@@ -1,1 +1,2 @@
-python-dotenv==0.17.1
+pillow
+python-dotenv

@@ -1,42 +1,42 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block body %}
+{% block header_content %}
+  <h1 class="text-3xl text-gray-900 font-semibold tracking-wide uppercase">
+    Wallets
+  </h1>
+{% endblock %}
+
+
+{% block content %}
   <div class="py-8">
-    <div class="max-w-5xl mx-auto px-4">
-      <h1 class="mb-10 text-3xl text-center text-gray-900 font-semibold tracking-wide uppercase">
-        My Wallets
-      </h1>
+    <ul class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+    {% for wallet in wallet_list %}
+      <li class="flex">
+        <div class="mr-5">
+          <a
+            class="text-green-700 hover:text-green-800"
+            href="{% url 'wallet.read' wallet.id %}"
+          >
+            <i class="fas fa-wallet text-8xl"></i>
+          </a>
+          <p class="text-sm text-gray-500 text-center">
+            ₳ {{ wallet.ada_balance|floatformat:6 }}
+          </p>
+        </div>
 
-      <ul class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
-      {% for wallet in wallet_list %}
-        <li class="flex">
-          <div class="mr-5">
-            <a
-              class="text-green-700 hover:text-green-800"
-              href="{% url 'wallet.read' wallet.id %}"
-            >
-              <i class="fas fa-wallet text-8xl"></i>
+        <div>
+          <h2 class="text-xl leading-6 font-medium text-gray-900 mb-2">
+            <a href="{% url 'wallet.read' wallet.id %}">
+              {{ wallet.name }}
             </a>
-            <p class="text-sm text-gray-500 text-center">
-              ₳ {{ wallet.ada_balance|floatformat:6 }}
-            </p>
-          </div>
-
-          <div>
-            <h2 class="text-xl leading-6 font-medium text-gray-900 mb-2">
-              <a href="{% url 'wallet.read' wallet.id %}">
-                {{ wallet.name }}
-              </a>
-            </h2>
-            <p class="text-sm text-gray-500 break-all font-mono">
-              {{ wallet.payment_address }}
-            </p>
-          </div>
-        </li>
-      {% endfor %}
-      </ul>
-    </div>
+          </h2>
+          <p class="text-sm text-gray-500 break-all font-mono">
+            {{ wallet.payment_address }}
+          </p>
+        </div>
+      </li>
+    {% endfor %}
+    </ul>
   </div>
-
 {% endblock %}

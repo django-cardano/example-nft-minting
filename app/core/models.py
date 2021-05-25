@@ -1,3 +1,5 @@
+import uuid
+
 from django.conf import settings
 from django.db import models
 
@@ -11,15 +13,6 @@ from django_cardano.settings import django_cardano_settings
 from django_cardano.shortcuts import filter_utxos
 
 lovelace_unit = django_cardano_settings.LOVELACE_UNIT
-
-
-# Introduce these classes initially so they may be easily extended later if need be
-class MintingPolicy(AbstractMintingPolicy):
-    pass
-
-
-class Transaction(AbstractTransaction):
-    pass
 
 
 class Wallet(AbstractWallet):
@@ -37,10 +30,11 @@ class Wallet(AbstractWallet):
 
 
 class Asset(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     date_created = models.DateTimeField(auto_now_add=True)
-    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-
-    metadata = models.JSONField(default=dict)
+    name = models.CharField(max_length=30)
+    metadata = models.JSONField(default=dict, blank=True)
+    image = models.ImageField()
 
     minting_policy = models.ForeignKey(
         settings.DJANGO_CARDANO_MINTING_POLICY_MODEL,
@@ -54,4 +48,4 @@ class Asset(models.Model):
     )
 
     def __str__(self):
-        return self.metadata.get('name', f'Asset {self.id}')
+        return self.name

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load core_extras %}
+
+{% block header_content %}
+  <h1 class="text-3xl text-gray-900 font-semibold tracking-wide uppercase">
+    {{ asset.name }}
+  </h1>
+{% endblock %}
+
+
+{% block content %}
+  <main>
+    {{ asset.name }}
+  </main>
+{% endblock %}

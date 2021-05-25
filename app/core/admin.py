@@ -7,6 +7,7 @@ from django_cardano.models import (
 )
 
 from .forms import WalletCreateForm
+from .models import Asset
 
 MintingPolicy = get_minting_policy_model()
 Transaction = get_transaction_model()
@@ -40,3 +41,9 @@ class WalletAdmin(admin.ModelAdmin):
             wallet.creator = request.user
 
         return wallet
+
+
+@admin.register(Asset)
+class AssetAdmin(admin.ModelAdmin):
+    list_display = ('name', 'metadata', 'id',)
+    fields = ('name', 'image', 'metadata',)

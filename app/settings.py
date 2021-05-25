@@ -90,7 +90,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-MEDIA_ROOT = PROJECT_PATH / 'media'
+MEDIA_ROOT = ROOT_PATH / 'media'
 MEDIA_URL = '/media/'
 
 STATIC_URL = '/static/'
@@ -104,6 +104,6 @@ DJANGO_CARDANO = {
     'TOKEN_DUST': 1650000,
 }
 
-DJANGO_CARDANO_MINTING_POLICY_MODEL = 'core.MintingPolicy'
-DJANGO_CARDANO_TRANSACTION_MODEL = 'core.Transaction'
+DJANGO_CARDANO_MINTING_POLICY_MODEL = 'django_cardano.MintingPolicy'
+DJANGO_CARDANO_TRANSACTION_MODEL = 'django_cardano.Transaction'
 DJANGO_CARDANO_WALLET_MODEL = 'core.Wallet'

@@ -17,9 +17,18 @@ from django_cardano.models import (
 from django_cardano.util import CardanoUtils
 
 from .forms import TransferADAForm
+from .models import Asset
 
 Transaction = get_transaction_model()
 Wallet = get_wallet_model()
+
+
+class AssetListView(ListView):
+    model = Asset
+
+
+class AssetDetailView(DetailView):
+    model = Asset
 
 
 class WalletListView(ListView):

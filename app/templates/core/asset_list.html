@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+  {{ block.super }}
+
+  <style>
+    .grid-cell {
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      padding-top: 100%;
+      position: relative;
+      width: 100%;
+    }
+  </style>
+{% endblock %}
+
+
+{% block header_content %}
+  <h1 class="text-3xl text-gray-900 font-semibold tracking-wide uppercase">
+    Assets
+  </h1>
+{% endblock %}
+
+
+{% block content %}
+  <div class="py-8">
+    <ul class="grid gap-8 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
+      {% for asset in asset_list %}
+        <a
+          href="{% url 'asset.read' asset.id %}"
+          class="grid-cell rounded-md hover:opacity-75"
+          style="background-image: url({{ asset.image.url }})"
+        >
+          <h2 class="absolute text-gray-900 text-base text-center left-0 right-0">
+            {{ asset.name }}
+          </h2>
+        </a>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
