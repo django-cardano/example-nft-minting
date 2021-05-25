@@ -1,13 +1,30 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Example NFT Minting</title>
 
-  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  {% block style %}
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@next/dist/base.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static "css/forms.min.css" %}">
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@next/dist/components.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@next/dist/utilities.min.css" />
+  {% endblock %}
 </head>
 
 <body>
+{% if messages %}
+  <div>
+    <ul class="messages">
+      {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
 {% block body %}
 {% endblock body %}
 </body>
