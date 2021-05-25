@@ -46,7 +46,7 @@ class TransferADAForm(forms.Form):
     fee = forms.CharField(
         label='Transaction fee',
         widget=forms.TextInput(attrs={
-            'class': TEXT_INPUT_CLASSES + 'bg-gray-100',
+            'class': TEXT_INPUT_CLASSES + 'bg-gray-50',
             'disabled': True,
             'value': '--------',
         }),

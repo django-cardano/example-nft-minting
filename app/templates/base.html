@@ -11,6 +11,14 @@
     <link rel="stylesheet" type="text/css" href="{% static "css/forms.min.css" %}">
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/tailwindcss@next/dist/components.min.css" />
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/tailwindcss@next/dist/utilities.min.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
   {% endblock %}
 
   {% block head_scripts %}
@@ -18,23 +26,23 @@
   {% endblock head_scripts %}
 </head>
 
-<body>
-<div class="bg-blue-400">
+<body class="pb-12">
+<div class="bg-green-700">
   <div class="max-w-5xl mx-auto px-2 flex">
     <nav class="flex">
 
       <a
         href="{% url 'wallet.list' %}"
-        class="inline-block px-4 py-3 text-white hover:underline"
+        class="inline-block px-4 py-3 text-white font-medium hover:underline"
       >
-        Wallets
+        <i class="fas fa-wallet text-xl mr-1"></i> Wallets
       </a>
 
       <a
         href="#"
-        class="inline-block px-4 py-3 text-white hover:underline"
+        class="inline-block px-4 py-3 text-white font-medium hover:underline"
       >
-        Assets
+        <i class="far fa-file-image text-xl mr-1"></i> Assets
       </a>
     </nav>
   </div>
@@ -45,7 +53,7 @@
 
 {% endblock body %}
 
-<footer class="fixed left-0 right-0 bottom-0 bg-gray-200">
+<footer class="fixed left-0 right-0 bottom-0 bg-green-100 h-12">
   <div class="max-w-5xl mx-auto px-2 py-4 flex">
     <dl class="text-sm flex">
       <dt class="font-semibold mr-1">Epoch:</dt>

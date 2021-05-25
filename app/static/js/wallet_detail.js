@@ -35,4 +35,6 @@ $(document).ready(function() {
     'leading': false,
     'trailing': true,
   }));
+
+  updateTxFee();
 });

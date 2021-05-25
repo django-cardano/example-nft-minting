@@ -3,6 +3,21 @@
 
 {% block body %}
   <main>
-    {{ transaction.tx_id }}
+    <div class="max-w-5xl mx-auto px-4 my-6 text-center">
+      <h1 class="text-3xl text-gray-900 font-semibold tracking-wide uppercase">
+        Transaction Submitted
+      </h1>
+
+      <a
+        class="text-sm break-all hover:underline"
+        href="https://explorer.cardano-testnet.iohkdev.io/en/transaction?id={{ transaction.tx_id }}"
+        target="_blank"
+        rel="noopener"
+      >
+        {{ transaction.tx_id }}
+      </a>
+
+    </div>
+
   </main>
 {% endblock %}

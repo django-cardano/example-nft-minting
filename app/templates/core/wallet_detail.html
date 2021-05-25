@@ -40,11 +40,7 @@
       max-w-5xl mx-auto px-4 sm:px-6 lg:px-8
       flex items-center
     ">
-      <img
-        alt="{{ wallet.payment_address }}"
-        class="w-28 h-28 mr-4"
-        src="{% static 'images/wallet.svg' %}"
-      />
+      <i class="fas fa-wallet text-8xl text-green-700 mr-4"></i>
 
       <div class="flex-grow">
         <h1 class="text-3xl text-gray-900 font-semibold tracking-wide">
@@ -65,8 +61,8 @@
           <thead>
             <tr>
               <th class="text-left p-2">Tx Hash</th>
-              <th class="text-left p-2 w-20">Tx Ix</th>
-              <th class="text-left p-2 w-32">ADA</th>
+              <th class="text-left p-2 w-14 text-center">Tx Ix</th>
+              <th class="text-left p-2 w-24 text-center">ADA</th>
             </tr>
           </thead>
           <tbody>
@@ -75,10 +71,10 @@
                 <td class="utxo-cell font-mono break-all">
                   {{ utxo.TxHash }}
                 </td>
-                <td class="utxo-cell">
+                <td class="utxo-cell text-center">
                   {{ utxo.TxIx }}
                 </td>
-                <td class="utxo-cell">
+                <td class="utxo-cell text-center">
                   ₳ {{ utxo.Tokens.lovelace|toada|floatformat:6 }}
                 </td>
               </tr>
@@ -105,8 +101,8 @@
           class="
             rounded-md border border-transparent shadow-sm
             px-4 py-2 mt-8
-            bg-indigo-600 hover:bg-indigo-700
-            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+            bg-green-700 hover:bg-green-800
+            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-800
             text-base font-medium text-white
           ">
           Send ADA
