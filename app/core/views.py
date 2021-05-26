@@ -78,6 +78,10 @@ class AssetDetailView(FormView):
                     spending_password=spending_password,
                     minting_password=minting_password,
                 )
+                asset.minting_transaction = self.transaction
+                asset.minting_policy = policy
+                asset.save()
+
                 return super().form_valid(form)
             except CardanoError as e:
                 error_field_name = None
