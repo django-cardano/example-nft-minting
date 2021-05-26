@@ -8,7 +8,7 @@ from django_cardano.validators import validate_cardano_address
 Wallet = get_wallet_model()
 
 TEXT_INPUT_CLASSES = """
-    mt-1 rounded-md border-gray-300 shadow-sm
+    mt-1 rounded-md border-gray-300 shadow-sm text-gray-700
     focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50
 """
 
@@ -63,3 +63,39 @@ class TransferADAForm(forms.Form):
     def clean_quantity(self):
         quantity = self.cleaned_data['quantity']
         return int(Decimal(quantity) * 1000000)
+
+
+class MintNFTForm(forms.Form):
+    payment_wallet = forms.ModelChoiceField(
+        queryset=Wallet.objects.all(),
+        widget=forms.Select(
+            attrs={'class': TEXT_INPUT_CLASSES},
+        )
+    )
+
+    address = forms.CharField(
+        label='Receiving address',
+        widget=forms.Textarea(attrs={
+            'class': TEXT_INPUT_CLASSES,
+            'placeholder': 'Paste an address...',
+            'rows': 4,
+        }),
+        validators=(validate_cardano_address,)
+    )
+
+    fee = forms.CharField(
+        label='Transaction fee',
+        widget=forms.TextInput(attrs={
+            'class': TEXT_INPUT_CLASSES + 'bg-gray-50',
+            'disabled': True,
+            'value': '--------',
+        }),
+        required=False,
+    )
+    password = forms.CharField(
+        label='Spending password',
+        widget=forms.PasswordInput(attrs={
+            'class': TEXT_INPUT_CLASSES,
+        }),
+        required=False,
+    )

@@ -2,6 +2,37 @@
 {% load static %}
 {% load core_extras %}
 
+{% block style %}
+    {{ block.super }}
+
+    <style>
+    #mint-nft-form label:not(:first-of-type) {
+        margin-top: 1.2rem;
+    }
+
+    .errorlist li {
+      color: red;
+      font-size: 0.875rem;
+    }
+
+    .errorlist.nonfield {
+      order: 1;
+      margin-top: 0.5rem;
+    }
+
+    #id_metadata {
+        font-size: 0.75rem;
+        color: gray;
+        font-family: monospace;
+    }
+
+    #id_address {
+        font-size: 0.875rem;
+    }
+    </style>
+{% endblock %}
+
+
 {% block header_content %}
   <h1 class="text-3xl text-gray-900 font-semibold tracking-wide uppercase">
     {{ asset.name }}
@@ -10,7 +41,60 @@
 
 
 {% block content %}
-  <main>
-    {{ asset.name }}
+  <main class="
+    mt-6 flex flex-col md:flex-row
+  ">
+    <div class="flex-1">
+      <img
+        alt="{{ asset.name }}"
+        class="rounded-md w-full"
+        src="{{ asset.image.url }}"
+      >
+    </div>
+
+    <div class="
+      mt-8
+      md:w-3/8 md:ml-8 md:mt-0
+    ">
+
+      <form
+        action="{{ request.path }}"
+        id="mint-nft-form"
+        method="post"
+        class="
+          grid grid-flow-row
+          p-4 rounded-md bg-gray-100
+        "
+      >
+        {% csrf_token %}
+        {{ form }}
+
+        <button
+          type="submit"
+          class="
+            rounded-md border border-transparent shadow-sm
+            px-4 py-2 mt-4
+            bg-green-700 hover:bg-green-800
+            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-800
+            text-base font-medium text-white
+          ">
+          Mint NFT
+        </button>
+      </form>
+    </div>
+
   </main>
+{% endblock %}
+
+{% block body_scripts %}
+  {{ block.super }}
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+    integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer">
+  </script>
+
+  <script src="{% static 'js/asset_detail.js' %}"></script>
 {% endblock %}

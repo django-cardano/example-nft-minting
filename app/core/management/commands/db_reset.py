@@ -24,7 +24,7 @@ ASSET_INFO_LIST = [{
     'artist': 'Aaron Burden',
     'date_published': '2016-03-06',
 }, {
-    'name': 'Finding my Roots',
+    'name': 'Tree of Life',
     'image': 'https://unsplash.com/photos/EwKXn5CapA4/download?w=1920',
     'genre': 'Nature',
     'location': 'California, USA',

@@ -19,14 +19,14 @@
 
 {% block header_content %}
   <h1 class="text-3xl text-gray-900 font-semibold tracking-wide uppercase">
-    Assets
+    {{ asset_list.count }} Assets
   </h1>
 {% endblock %}
 
 
 {% block content %}
-  <div class="py-8">
-    <ul class="grid gap-8 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
+  <div class="py-8 px-4">
+    <ul class="grid gap-12 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
       {% for asset in asset_list %}
         <a
           href="{% url 'asset.read' asset.id %}"
