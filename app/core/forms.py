@@ -9,7 +9,7 @@ Wallet = get_wallet_model()
 
 TEXT_INPUT_CLASSES = """
     mt-1 rounded-md border-gray-300 shadow-sm text-gray-700
-    focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50
+    focus:border-green-700 focus:ring focus:ring-green-600 focus:ring-opacity-25
 """
 
 

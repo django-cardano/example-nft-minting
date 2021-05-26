@@ -1,3 +1,4 @@
+import json
 import uuid
 
 from django.conf import settings
@@ -52,3 +53,7 @@ class Asset(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def metadata_json(self):
+        return json.dumps(self.metadata)

@@ -29,6 +29,26 @@
     #id_address {
         font-size: 0.875rem;
     }
+
+    .card-container {
+      position: relative;
+    }
+
+    .card, .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: all 0.5s ease;
+    }
+
+    .card-front, .card-back {
+      backface-visibility: hidden;
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+    }
     </style>
 {% endblock %}
 
@@ -41,20 +61,31 @@
 
 
 {% block content %}
-  <main class="
-    mt-6 flex flex-col md:flex-row
-  ">
+  <main class="mt-6 flex flex-col md:flex-row">
     <div class="flex-1">
-      <img
-        alt="{{ asset.name }}"
-        class="rounded-md w-full"
-        src="{{ asset.image.url }}"
-      >
+      <div class="card-container">
+        <div class="card">
+          <div class="card-front">
+            <img
+              alt="{{ asset.name }}"
+              class="rounded-md"
+              src="{{ asset.image.url }}"
+            >
+          </div>
+          <div class="card-back">
+            <h2 class="text-2xl mb-4 font-semibold">
+              Asset Metadata
+            </h2>
+            <pre class="asset-metadata text-sm"></pre>
+          </div>
+        </div>
+
+      </div>
     </div>
 
     <div class="
       mt-8
-      md:w-3/8 md:ml-8 md:mt-0
+      md:w-1/3 md:ml-8 md:mt-0
     ">
 
       <form
@@ -89,12 +120,8 @@
 {% block body_scripts %}
   {{ block.super }}
 
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
-    integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer">
+  <script>
+    var assetMetadata = JSON.parse('{{ asset.metadata_json|safe }}');
   </script>
-
   <script src="{% static 'js/asset_detail.js' %}"></script>
 {% endblock %}

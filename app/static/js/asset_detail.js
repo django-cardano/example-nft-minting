@@ -30,6 +30,23 @@ $(document).ready(function() {
     });
   }
 
+  var cardContainer = $('.card-container');
+  var card = $('.card');
+
+  var imageAspectRatio = assetMetadata.height / assetMetadata.width;
+  var paddingBottom = (imageAspectRatio * 100) + '%';
+  cardContainer.css('padding-bottom', paddingBottom);
+
+  cardContainer.mouseenter(function() {
+    card.css('transform', 'rotateY(180deg)');
+  }).mouseleave(function() {
+    card.css('transform', '');
+  });
+
+  var assetMetadataPre = $('.asset-metadata');
+  assetMetadataPre.html(JSON.stringify(assetMetadata, null, 2));
+
+  // card.on('mouseover')
   // $('#id_address').keyup(_.debounce(updateTxFee, 500, {
   //   'leading': false,
   //   'trailing': true,
