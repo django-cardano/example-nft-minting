@@ -10,21 +10,21 @@ $(document).ready(function() {
     }
     const form = mintNFTForm[0];
 
+    const mintingPolicyId = form.minting_policy.value;
+    const paymentWalletId = form.payment_wallet.value;
     const destinationAddress = form.destination_address.value;
-    const paymentWalletId = form.mint_payment_wallet.value;
 
-    if (!(destinationAddress && paymentWalletId)) {
+    if (!(mintingPolicyId && paymentWalletId && destinationAddress)) {
       feeField.val('--------');
       return;
     }
-
-    console.log(paymentWalletId);
 
     $.ajax({
       url: form.action,
       method: 'post',
       data: {
-        mint_payment_wallet: paymentWalletId,
+        minting_policy: mintingPolicyId,
+        payment_wallet: paymentWalletId,
         destination_address: destinationAddress,
       },
       headers: {

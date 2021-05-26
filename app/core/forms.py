@@ -66,8 +66,7 @@ class TransferADAForm(forms.Form):
         }),
         required=False,
     )
-    password = forms.CharField(
-        label='Spending password',
+    spending_password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'class': TEXT_INPUT_CLASSES,
         }),
@@ -80,7 +79,14 @@ class TransferADAForm(forms.Form):
 
 
 class MintNFTForm(forms.Form):
-    mint_payment_wallet = forms.ModelChoiceField(
+    minting_policy = forms.ModelChoiceField(
+        queryset=MintingPolicy.objects.all(),
+        widget=forms.Select(
+            attrs={'class': TEXT_INPUT_CLASSES},
+        )
+    )
+
+    payment_wallet = forms.ModelChoiceField(
         queryset=Wallet.objects.all(),
         widget=forms.Select(
             attrs={'class': TEXT_INPUT_CLASSES},
@@ -106,10 +112,19 @@ class MintNFTForm(forms.Form):
         }),
         required=False,
     )
-    password = forms.CharField(
+
+    spending_password = forms.CharField(
         label='Spending password',
-        widget=forms.PasswordInput(attrs={
-            'class': TEXT_INPUT_CLASSES,
-        }),
+        widget=forms.PasswordInput(
+            attrs={'class': TEXT_INPUT_CLASSES}
+        ),
+        required=False,
+    )
+
+    minting_password = forms.CharField(
+        label='Minting password',
+        widget=forms.PasswordInput(
+            attrs={'class': TEXT_INPUT_CLASSES}
+        ),
         required=False,
     )

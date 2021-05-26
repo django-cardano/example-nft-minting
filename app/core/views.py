@@ -9,7 +9,7 @@ from django.views.generic import (
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from django_cardano.exceptions import CardanoError
+from django_cardano.exceptions import CardanoError, CardanoErrorType
 from django_cardano.models import (
     get_transaction_model,
     get_wallet_model,
@@ -44,56 +44,55 @@ class AssetDetailView(FormView):
         super().__init__(*args, **kwargs)
         self.transaction = None
 
-    def construct_nft_metadata(self, policy, asset_name):
+    def form_valid(self, form):
         asset = Asset.objects.get(pk=self.kwargs['pk'])
 
-        return {
+        form_data = form.cleaned_data
+
+        policy = form_data['minting_policy']
+        payment_wallet = form_data['payment_wallet']
+        to_address = form_data['destination_address']
+        spending_password = form_data['spending_password']
+        minting_password = form_data['minting_password']
+
+        asset_name = clean_token_asset_name(asset.name)
+        tx_metadata = {
             "721": {
                 policy.policy_id: {
                     asset_name: asset.metadata
                 }
             }
         }
+        mint_tokens_kwargs = {
+            'policy': policy,
+            'quantity': 1,
+            'to_address': to_address,
+            'asset_name': asset_name,
+            'metadata': tx_metadata,
+        }
 
-    def form_valid(self, form):
-        asset = Asset.objects.get(pk=self.kwargs['pk'])
-
-        form_data = form.cleaned_data
-
-        payment_wallet = form_data['mint_payment_wallet']
-        to_address = form_data['destination_address']
-        spending_password = form_data['password']
-
-        asset_name = clean_token_asset_name(asset.name)
-        # tx_metadata = {
-        #     "721": {
-        #         policy.policy_id: {
-        #             asset_name: asset.metadata
-        #         }
-        #     }
-        # }
-        if spending_password:
-            print('mint nft')
-            # try:
-            #     self.transaction = wallet.send_lovelace(
-            #         to_address=to_address,
-            #         quantity=quantity,
-            #         password=spending_password
-            #     )
-            # except CardanoError as e:
-            #     form.add_error(None, str(e))
-            #     return self.form_invalid(form)
-            #
-            # return super().form_valid(form)
+        if spending_password and minting_password:
+            try:
+                self.transaction = payment_wallet.mint_tokens(
+                    **mint_tokens_kwargs,
+                    spending_password=spending_password,
+                    minting_password=minting_password,
+                )
+                return super().form_valid(form)
+            except CardanoError as e:
+                error_field_name = None
+                if e.code == CardanoErrorType.SIGNING_KEY_DECRYPTION_FAILURE:
+                    error_field_name = 'spending_password'
+                elif e.code == CardanoErrorType.POLICY_SIGNING_KEY_DECRYPTION_FAILURE:
+                    error_field_name = 'minting_password'
+                form.add_error(error_field_name, str(e))
+                return self.form_invalid(form)
         else:
             try:
                 transaction = payment_wallet.mint_tokens(
-                    quantity=1,
-                    to_address=to_address,
+                    **mint_tokens_kwargs,
                     spending_password=None,
                     minting_password=None,
-                    asset_name=clean_token_asset_name(asset.name),
-                    metadata=self.construct_nft_metadata,
                 )
                 tx_fee = transaction.calculate_min_fee()
                 return JsonResponse({'fee': tx_fee})
@@ -129,20 +128,22 @@ class WalletDetailView(FormView):
         wallet = Wallet.objects.get(pk=self.kwargs['pk'])
         to_address = form_data['address']
         quantity = form_data['quantity']
-        spending_password = form_data['password']
+        spending_password = form_data['spending_password']
 
         if spending_password:
             try:
                 self.transaction = wallet.send_lovelace(
                     to_address=to_address,
                     quantity=quantity,
-                    password=spending_password
+                    password=spending_password,
                 )
+                return super().form_valid(form)
             except CardanoError as e:
-                form.add_error(None, str(e))
+                error_field_name = None
+                if e.code == CardanoErrorType.SIGNING_KEY_DECRYPTION_FAILURE:
+                    error_field_name = 'spending_password'
+                form.add_error(error_field_name, str(e))
                 return self.form_invalid(form)
-
-            return super().form_valid(form)
         else:
             try:
                 transaction = wallet.send_lovelace(
