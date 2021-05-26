@@ -6,7 +6,7 @@ from django_cardano.models import (
     get_wallet_model,
 )
 
-from .forms import WalletCreateForm
+from .forms import MintingPolicyCreateForm, WalletCreateForm
 from .models import Asset
 
 MintingPolicy = get_minting_policy_model()
@@ -34,16 +34,50 @@ class WalletAdmin(admin.ModelAdmin):
         Given a ModelForm return an unsaved instance. ``change`` is True if
         the object is being changed, and False if it's being added.
         """
-        wallet = form.save(commit=False)
+        if change:
+            return super().save_form(request, form, change)
 
-        if not change:
-            wallet.generate_keys(form.cleaned_data['password'])
-            wallet.creator = request.user
+        return Wallet.objects.create(
+            creator=request.user,
+            **form.cleaned_data
+        )
 
-        return wallet
+    def save_related(self, request, form, formsets, change):
+        pass
 
 
 @admin.register(Asset)
 class AssetAdmin(admin.ModelAdmin):
     list_display = ('name', 'metadata', 'id',)
     fields = ('name', 'image', 'metadata',)
+
+
+@admin.register(MintingPolicy)
+class MintingPolicyAdmin(admin.ModelAdmin):
+    list_display = ('name', 'policy_id',)
+    search_fields = ('name', 'policy_id',)
+    fields = ('name',)
+
+    def get_form(self, request, obj=None, **kwargs):
+        if not obj:
+            return MintingPolicyCreateForm
+        return super().get_form(request, obj, **kwargs)
+
+    def get_fields(self, request, obj=None):
+        if obj:
+            return self.fields
+
+        return ('name', 'password', 'valid_before_slot',)
+
+    def save_form(self, request, form, change):
+        """
+        Given a ModelForm return an unsaved instance. ``change`` is True if
+        the object is being changed, and False if it's being added.
+        """
+        if change:
+            return super().save_form(request, form, change)
+
+        return MintingPolicy.objects.create(**form.cleaned_data)
+
+    def save_related(self, request, form, formsets, change):
+        pass

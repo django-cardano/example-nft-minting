@@ -152,14 +152,14 @@ class Command(BaseCommand):
             with request.urlopen(image_url) as fp:
                 image_bytes = fp.read()
                 image = Image.open(io.BytesIO(image_bytes))
-
+                image_format = image.format.lower()
                 asset_info.update({
                     'width': image.width,
                     'height': image.height,
+                    'format': image_format,
                 })
 
-                image_type = image.format.lower()
-                filename = '{}.{}'.format(slugify(asset_name), image_type)
+                filename = '{}.{}'.format(slugify(asset_name), image_format)
 
                 asset.image.save(
                     filename,

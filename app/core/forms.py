@@ -2,9 +2,13 @@ from decimal import Decimal
 from django import forms
 from django.core.exceptions import ValidationError
 
-from django_cardano.models import get_wallet_model
+from django_cardano.models import (
+    get_minting_policy_model,
+    get_wallet_model,
+)
 from django_cardano.validators import validate_cardano_address
 
+MintingPolicy = get_minting_policy_model()
 Wallet = get_wallet_model()
 
 TEXT_INPUT_CLASSES = """
@@ -22,6 +26,16 @@ class WalletCreateForm(forms.ModelForm):
     class Meta:
         model = Wallet
         fields = ('name', 'password',)
+
+
+class MintingPolicyCreateForm(forms.ModelForm):
+    name = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
+    valid_before_slot = forms.IntegerField()
+
+    class Meta:
+        model = MintingPolicy
+        fields = ('name', 'password', 'valid_before_slot',)
 
 
 class TransferADAForm(forms.Form):
@@ -66,15 +80,15 @@ class TransferADAForm(forms.Form):
 
 
 class MintNFTForm(forms.Form):
-    payment_wallet = forms.ModelChoiceField(
+    mint_payment_wallet = forms.ModelChoiceField(
         queryset=Wallet.objects.all(),
         widget=forms.Select(
             attrs={'class': TEXT_INPUT_CLASSES},
         )
     )
 
-    address = forms.CharField(
-        label='Receiving address',
+    destination_address = forms.CharField(
+        label='NFT destination address',
         widget=forms.Textarea(attrs={
             'class': TEXT_INPUT_CLASSES,
             'placeholder': 'Paste an address...',

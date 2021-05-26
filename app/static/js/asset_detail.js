@@ -1,21 +1,31 @@
 $(document).ready(function() {
-  function updateTxFee() {
-    var address = $('#id_address').val();
-    var feeField = $('#id_fee');
+  var mintNFTForm = $('#mint-nft-form');
+  var feeField = $('#id_fee');
 
-    if (!address) {
+  function updateTxFee(e) {
+    if (e) {
+      if (e.target.name === 'password') {
+        return;
+      }
+    }
+    const form = mintNFTForm[0];
+
+    const destinationAddress = form.destination_address.value;
+    const paymentWalletId = form.mint_payment_wallet.value;
+
+    if (!(destinationAddress && paymentWalletId)) {
       feeField.val('--------');
       return;
     }
 
-    var form = document.getElementById('mint-nft-form');
+    console.log(paymentWalletId);
+
     $.ajax({
       url: form.action,
       method: 'post',
       data: {
-        source_wallet_id: walletId,
-        quantity: quantity,
-        address: address,
+        mint_payment_wallet: paymentWalletId,
+        destination_address: destinationAddress,
       },
       headers: {
         "X-CSRFToken": form.csrfmiddlewaretoken.value
@@ -30,6 +40,12 @@ $(document).ready(function() {
     });
   }
 
+  // ----------------------------------------------------------------
+  $('.asset-metadata').html(
+    JSON.stringify(assetMetadata, null, 2)
+  );
+
+  // ----------------------------------------------------------------
   var cardContainer = $('.card-container');
   var card = $('.card');
 
@@ -43,14 +59,11 @@ $(document).ready(function() {
     card.css('transform', '');
   });
 
-  var assetMetadataPre = $('.asset-metadata');
-  assetMetadataPre.html(JSON.stringify(assetMetadata, null, 2));
+  // ----------------------------------------------------------------
+  mintNFTForm.on('keyup change', _.debounce(updateTxFee, 500, {
+    'leading': false,
+    'trailing': true,
+  }));
 
-  // card.on('mouseover')
-  // $('#id_address').keyup(_.debounce(updateTxFee, 500, {
-  //   'leading': false,
-  //   'trailing': true,
-  // }));
-  //
-  // updateTxFee();
+  updateTxFee();
 });

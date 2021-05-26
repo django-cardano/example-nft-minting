@@ -21,6 +21,7 @@ from .forms import (
     TransferADAForm,
 )
 from .models import Asset
+from .shortcuts import clean_token_asset_name
 
 Transaction = get_transaction_model()
 Wallet = get_wallet_model()
@@ -43,15 +44,34 @@ class AssetDetailView(FormView):
         super().__init__(*args, **kwargs)
         self.transaction = None
 
+    def construct_nft_metadata(self, policy, asset_name):
+        asset = Asset.objects.get(pk=self.kwargs['pk'])
+
+        return {
+            "721": {
+                policy.policy_id: {
+                    asset_name: asset.metadata
+                }
+            }
+        }
 
     def form_valid(self, form):
+        asset = Asset.objects.get(pk=self.kwargs['pk'])
+
         form_data = form.cleaned_data
 
-        wallet = Wallet.objects.get(pk=self.kwargs['pk'])
-        to_address = form_data['address']
-        quantity = form_data['quantity']
+        payment_wallet = form_data['mint_payment_wallet']
+        to_address = form_data['destination_address']
         spending_password = form_data['password']
 
+        asset_name = clean_token_asset_name(asset.name)
+        # tx_metadata = {
+        #     "721": {
+        #         policy.policy_id: {
+        #             asset_name: asset.metadata
+        #         }
+        #     }
+        # }
         if spending_password:
             print('mint nft')
             # try:
@@ -66,16 +86,19 @@ class AssetDetailView(FormView):
             #
             # return super().form_valid(form)
         else:
-            print('get tx fee')
-            # try:
-            #     transaction = wallet.send_lovelace(
-            #         to_address=to_address,
-            #         quantity=quantity,
-            #     )
-            #     tx_fee = transaction.calculate_min_fee()
-            #     return JsonResponse({'fee': tx_fee})
-            # except CardanoError as e:
-            #     return JsonResponse({'error': str(e)}, status=400)
+            try:
+                transaction = payment_wallet.mint_tokens(
+                    quantity=1,
+                    to_address=to_address,
+                    spending_password=None,
+                    minting_password=None,
+                    asset_name=clean_token_asset_name(asset.name),
+                    metadata=self.construct_nft_metadata,
+                )
+                tx_fee = transaction.calculate_min_fee()
+                return JsonResponse({'fee': tx_fee})
+            except CardanoError as e:
+                return JsonResponse({'error': str(e)}, status=400)
 
     def get_success_url(self):
         return reverse('transaction.read', kwargs={
