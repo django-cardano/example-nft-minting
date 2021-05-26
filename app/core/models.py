@@ -18,6 +18,9 @@ lovelace_unit = django_cardano_settings.LOVELACE_UNIT
 class Wallet(AbstractWallet):
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
 
+    def __str__(self):
+        return f'{self.name} (₳ {self.ada_balance})'
+
     @property
     def lovelace_balance(self):
         lovelace_utxos = filter_utxos(self.utxos, type=lovelace_unit)
