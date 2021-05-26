@@ -5,6 +5,7 @@ from django_cardano.models import (
     get_transaction_model,
     get_wallet_model,
 )
+from django_cardano.util import CardanoUtils
 
 from .forms import MintingPolicyCreateForm, WalletCreateForm
 from .models import Asset
@@ -68,6 +69,15 @@ class MintingPolicyAdmin(admin.ModelAdmin):
             return self.fields
 
         return ('name', 'password', 'valid_before_slot',)
+
+    def get_changeform_initial_data(self, request):
+        initial_data = super().get_changeform_initial_data(request)
+
+        tip = CardanoUtils.query_tip()
+        current_slot = tip['slot']
+        initial_data['valid_before_slot'] = current_slot + 1000000
+
+        return initial_data
 
     def save_form(self, request, form, change):
         """
