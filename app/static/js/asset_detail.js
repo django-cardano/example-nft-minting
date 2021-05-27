@@ -4,12 +4,12 @@ $(document).ready(function() {
 
   function updateTxFee(e) {
     if (e) {
-      if (e.target.name === 'password') {
+      if (e.target.name === 'spending_password' || e.target.name === 'minting_password') {
         return;
       }
     }
-    const form = mintNFTForm[0];
 
+    const form = mintNFTForm[0];
     const mintingPolicyId = form.minting_policy.value;
     const paymentWalletId = form.payment_wallet.value;
     const destinationAddress = form.destination_address.value;
@@ -37,6 +37,8 @@ $(document).ready(function() {
       } else {
         feeField.val('--------');
       }
+    }).fail(function() {
+      feeField.val('--------');
     });
   }
 

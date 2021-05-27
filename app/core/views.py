@@ -67,7 +67,6 @@ class AssetDetailView(FormView):
             'policy': policy,
             'quantity': 1,
             'to_address': to_address,
-            'asset_name': asset_name,
             'metadata': tx_metadata,
         }
 

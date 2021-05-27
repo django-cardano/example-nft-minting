@@ -28,15 +28,33 @@
   <div class="py-8 px-4">
     <ul class="grid gap-12 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
       {% for asset in asset_list %}
-        <a
-          href="{% url 'asset.read' asset.id %}"
-          class="grid-cell rounded-md hover:opacity-75"
-          style="background-image: url({{ asset.image.url }})"
-        >
+        <li class="grid-cell">
+          <a
+            class="hover:opacity-75"
+            href="{% url 'asset.read' asset.id %}"
+          >
+            <img
+              alt="{{ asset.name }}"
+              class="absolute top-0 w-full h-full object-cover rounded-md"
+              src="{{ asset.image.url }}"
+            >
+          </a>
           <h2 class="absolute text-gray-900 text-base text-center left-0 right-0">
             {{ asset.name }}
           </h2>
-        </a>
+
+          {% if asset.minting_transaction %}
+            <a
+              class="
+                absolute bottom-2 right-2 w-10 h-10 flex items-center justify-center
+                rounded-full bg-gray-50 hover:bg-green-100 text-gray-900
+              "
+              href="{% url 'transaction.read' asset.minting_transaction.tx_id %}"
+            >
+              <i class="fas fa-leaf text-xl"></i>
+            </a>
+          {% endif %}
+        </li>
       {% endfor %}
     </ul>
   </div>
