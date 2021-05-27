@@ -29,7 +29,6 @@
       font-size: 0.825rem;
       padding: 0.5rem;
       vertical-align: top;
-      text-align: center;
     }
     </style>
 {% endblock %}
@@ -58,14 +57,14 @@
           <thead>
             <tr>
               <th class="text-left p-2">Tx Hash</th>
-              <th class="p-2 w-14 text-center">Tx Ix</th>
+              <th class="p-2 w-14">Tx Ix</th>
               <th class="p-2 w-28">Value</th>
             </tr>
           </thead>
           <tbody>
             {% for utxo in wallet.lovelace_utxos %}
               <tr>
-                <td class="utxo-cell text-left">
+                <td class="utxo-cell">
                   <a
                     class="break-all font-mono hover:underline"
                     href="https://explorer.cardano-testnet.iohkdev.io/en/transaction?id={{ utxo.TxHash }}"
@@ -75,10 +74,10 @@
                     {{ utxo.TxHash }}
                   </a>
                 </td>
-                <td class="utxo-cell">
+                <td class="utxo-cell text-center">
                   {{ utxo.TxIx }}
                 </td>
-                <td class="utxo-cell">
+                <td class="utxo-cell text-center">
                   {{ utxo.Tokens|token_list|safe }}
                 </td>
               </tr>
@@ -104,9 +103,9 @@
           <tbody>
           {% for utxo in wallet.token_utxos %}
             <tr>
-              <td class="utxo-cell text-left">
+              <td class="utxo-cell">
                 <a
-                  class="break-all font-mono hover:underline"
+                  class="break-all font-mono text-left hover:underline"
                   href="https://explorer.cardano-testnet.iohkdev.io/en/transaction?id={{ utxo.TxHash }}"
                   target="_blank"
                   rel="noopener"
@@ -114,10 +113,10 @@
                   {{ utxo.TxHash }}
                 </a>
               </td>
-              <td class="utxo-cell">
+              <td class="utxo-cell text-center">
                 {{ utxo.TxIx }}
               </td>
-              <td class="utxo-cell">
+              <td class="utxo-cell text-center">
                 {{ utxo.Tokens|token_list|safe }}
               </td>
             </tr>
@@ -135,7 +134,13 @@
         </table>
       </div>
 
-      {% include 'core/include/transfer_ada_form.html' %}
+      <div
+        class="
+        rounded-md bg-gray-100 my-8 p-4
+        md:w-72 md:ml-3 md:my-4
+      ">
+        {% include 'core/include/transfer_ada_form.html' %}
+      </div>
     </div>
   </main>
 {% endblock %}
