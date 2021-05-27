@@ -11,7 +11,6 @@ from django_cardano.models import (
 )
 
 from django_cardano.settings import django_cardano_settings
-from django_cardano.shortcuts import filter_utxos
 
 lovelace_unit = django_cardano_settings.LOVELACE_UNIT
 
@@ -24,9 +23,8 @@ class Wallet(AbstractWallet):
 
     @property
     def lovelace_balance(self):
-        lovelace_utxos = filter_utxos(self.utxos, type=lovelace_unit)
-        lovelace_balanace = sum([utxo['Tokens'][lovelace_unit] for utxo in lovelace_utxos])
-        return lovelace_balanace if lovelace_balanace else 0
+        lovelace_balance = sum([utxo['Tokens'][lovelace_unit] for utxo in self.lovelace_utxos])
+        return lovelace_balance if lovelace_balance else 0
 
     @property
     def ada_balance(self):

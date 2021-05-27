@@ -25,10 +25,11 @@
     }
 
     .utxo-cell {
-      border-top: 1px solid black;
-      font-size: 0.875rem;
+      border-top: 1px solid rgb(194, 194, 194);
+      font-size: 0.825rem;
       padding: 0.5rem;
       vertical-align: top;
+      text-align: center;
     }
     </style>
 {% endblock %}
@@ -53,28 +54,83 @@
   <main>
     <div class="flex flex-col lg:flex-row">
       <div class="flex-grow mt-4">
-        <table class="utxo-table">
+        <table class="utxo-table w-full">
           <thead>
             <tr>
               <th class="text-left p-2">Tx Hash</th>
-              <th class="text-left p-2 w-14 text-center">Tx Ix</th>
-              <th class="text-left p-2 w-28 text-center">ADA</th>
+              <th class="p-2 w-14 text-center">Tx Ix</th>
+              <th class="p-2 w-28">Value</th>
             </tr>
           </thead>
           <tbody>
-            {% for utxo in wallet.utxos %}
+            {% for utxo in wallet.lovelace_utxos %}
               <tr>
-                <td class="utxo-cell font-mono break-all">
-                  {{ utxo.TxHash }}
+                <td class="utxo-cell text-left">
+                  <a
+                    class="break-all font-mono hover:underline"
+                    href="https://explorer.cardano-testnet.iohkdev.io/en/transaction?id={{ utxo.TxHash }}"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {{ utxo.TxHash }}
+                  </a>
                 </td>
-                <td class="utxo-cell text-center">
+                <td class="utxo-cell">
                   {{ utxo.TxIx }}
                 </td>
-                <td class="utxo-cell text-center">
-                  ₳ {{ utxo.Tokens.lovelace|toada|floatformat:6 }}
+                <td class="utxo-cell">
+                  {{ utxo.Tokens|token_list|safe }}
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td
+                  class="text-center bg-gray-50 rounded-md p-2"
+                  colspan="3"
+                >
+                  <i class="fas fa-info-circle mr-2"></i> No ADA UTxOs
                 </td>
               </tr>
             {% endfor %}
+          </tbody>
+
+          <tbody>
+            <tr>
+              <td colspan="3" class="py-8">
+                <hr class="border-2 border-green-700" />
+              </td>
+            </tr>
+          </tbody>
+          <tbody>
+          {% for utxo in wallet.token_utxos %}
+            <tr>
+              <td class="utxo-cell text-left">
+                <a
+                  class="break-all font-mono hover:underline"
+                  href="https://explorer.cardano-testnet.iohkdev.io/en/transaction?id={{ utxo.TxHash }}"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  {{ utxo.TxHash }}
+                </a>
+              </td>
+              <td class="utxo-cell">
+                {{ utxo.TxIx }}
+              </td>
+              <td class="utxo-cell">
+                {{ utxo.Tokens|token_list|safe }}
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td
+                class="text-center bg-gray-50 rounded-md p-2"
+                colspan="3"
+              >
+                <i class="fas fa-info-circle mr-2"></i> No Token UTxOs
+              </td>
+            </tr>
+          {% endfor %}
           </tbody>
         </table>
       </div>
@@ -86,7 +142,7 @@
         class="
           grid grid-flow-row
           rounded-md bg-gray-100
-          my-4 p-4 lg:w-1/3 lg:ml-8
+          my-4 p-4 lg:w-72 lg:ml-3
         "
       >
         {% csrf_token %}
