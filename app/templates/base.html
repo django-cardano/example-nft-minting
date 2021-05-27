@@ -73,22 +73,38 @@
     </div>
 {% endblock body %}
 
-<footer class="fixed left-0 right-0 bottom-0 bg-green-100 h-12 py-2 px-1">
-  <div class="max-w-5xl mx-auto px-2 flex items-center">
-    <img
-      alt="Cardano Logo"
-      class="w-8 h-8 mr-2"
-      src="{% static 'images/cardano-ada-logo.svg' %}"
-    >
+<footer class="fixed left-0 right-0 bottom-0 bg-green-100">
+  <div class="
+    max-w-5xl mx-auto flex flex-col items-center justify-center
+    px-2 py-2
+    md:flex-row md:justify-between
+  ">
+    <div class="flex items-center">
+      <img
+        alt="Cardano Logo"
+        class="w-6 h-6 mr-2"
+        src="{% static 'images/cardano-ada-logo.svg' %}"
+      >
 
-    <dl class="text-xs flex">
-      <dt class="font-medium mr-1">Epoch:</dt>
-      <dd id="tip-epoch">---</dd>
-      <dt class="font-medium mr-1 ml-4">Block:</dt>
-      <dd id="tip-block">---</dd>
-      <dt class="font-medium mr-1 ml-4">Slot:</dt>
-      <dd id="tip-slot">---</dd>
-    </dl>
+      <dl class="flex text-xs">
+        <dt class="font-medium mr-1">Epoch:</dt>
+        <dd id="tip-epoch">---</dd>
+        <dt class="font-medium mr-1 ml-4">Block:</dt>
+        <dd id="tip-block">---</dd>
+        <dt class="font-medium mr-1 ml-4">Slot:</dt>
+        <dd id="tip-slot">---</dd>
+      </dl>
+    </div>
+
+    <a
+      class="text-xs hover:underline"
+      href="https://www.linkedin.com/in/allan-hart/"
+      rel="noopener"
+      target="_blank"
+      title="Visit LinkedIn Profile"
+    >
+      By Allan <i class="fas fa-heart"></i>
+    </a>
   </div>
 </footer>
 
