@@ -1,0 +1,25 @@
+<form
+  action="{{ request.path }}"
+  id="transfer-ada-form"
+  method="post"
+  class="
+    grid grid-flow-row
+    rounded-md bg-gray-100
+    my-4 p-4 lg:w-72 lg:ml-3
+  "
+>
+  {% csrf_token %}
+  {{ form }}
+
+  <button
+    type="submit"
+    class="
+      rounded-md border border-transparent shadow-sm
+      px-4 py-2 mt-8
+      bg-green-700 hover:bg-green-800
+      focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-800
+      text-base font-medium text-white
+    ">
+    Send ADA
+  </button>
+</form>

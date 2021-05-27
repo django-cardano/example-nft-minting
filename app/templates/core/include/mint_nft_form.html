@@ -1,0 +1,21 @@
+<form
+  action="{{ request.path }}"
+  id="mint-nft-form"
+  method="post"
+  class="grid grid-flow-row p-4 rounded-md bg-gray-100"
+>
+  {% csrf_token %}
+  {{ form }}
+
+  <button
+    type="submit"
+    class="
+      rounded-md border border-transparent shadow-sm
+      px-4 py-2 mt-4
+      bg-green-700 hover:bg-green-800
+      focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-800
+      text-base font-medium text-white
+    ">
+    Mint NFT
+  </button>
+</form>
