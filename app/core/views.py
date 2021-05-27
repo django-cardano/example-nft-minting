@@ -69,6 +69,7 @@ class AssetDetailView(FormView):
             'quantity': 1,
             'to_address': to_address,
             'metadata': tx_metadata,
+            'asset_name': asset_name,
         }
 
         if spending_password and minting_password:
