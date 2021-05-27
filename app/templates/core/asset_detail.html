@@ -61,38 +61,12 @@
 
 
 {% block content %}
-  <main class="mt-6 flex flex-col md:flex-row">
-    <div class="flex-1">
-      <div class="card-container">
-        <div class="card">
-          <div class="card-front shadow">
-            <img
-              alt="{{ asset.name }}"
-              class="rounded-md"
-              src="{{ asset.image.url }}"
-            >
-          </div>
-          <div class="card-back bg-gray-50 p-4 rounded-md shadow overflow-hidden">
-            <h2 class="text-2xl mb-4 font-semibold">
-              Asset Metadata
-            </h2>
-            <pre class="asset-metadata text-sm"></pre>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-
-
-    <div class="mt-8 md:w-1/3 md:ml-6 md:mt-0">
-      <div class="rounded-md bg-gray-100 p-4">
-        {% if asset.minting_transaction %}
-        {% else %}
-          {% include 'core/include/mint_nft_form.html' %}
-        {% endif %}
-      </div>
-    </div>
+  <main>
+    {% if asset.minting_transaction %}
+      Asset + transaction view
+    {% else %}
+      {% include 'core/include/mint_nft_view.html' %}
+    {% endif %}
   </main>
 {% endblock %}
 
