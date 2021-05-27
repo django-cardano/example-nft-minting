@@ -17,6 +17,7 @@ from django_cardano.models import (
 from django_cardano.util import CardanoUtils
 
 from .forms import (
+    ConsolidateTokensForm,
     MintNFTForm,
     TransferADAForm,
 )
@@ -160,8 +161,34 @@ class WalletDetailView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['wallet'] = Wallet.objects.get(pk=self.kwargs['pk'])
+
+        context.update({
+            'wallet': Wallet.objects.get(pk=self.kwargs['pk']),
+            'consolidate_tokens_form': ConsolidateTokensForm(),
+        })
+
         return context
+
+
+class WalletConsolidateView(FormView):
+    form_class = ConsolidateTokensForm
+
+    def form_valid(self, form):
+        wallet = Wallet.objects.get(pk=self.kwargs['pk'])
+        try:
+            transaction = wallet.consolidate_utxos(
+                password=form.cleaned_data['consolidate_tokens_password']
+            )
+        except CardanoError as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+        transaction_url = reverse('transaction.read', kwargs={
+            'tx_id': transaction.tx_id
+        })
+        return JsonResponse({'transaction_url': transaction_url})
+
+    def form_invalid(self, form):
+        return JsonResponse({'error': 'Invalid password'})
 
 
 class TransactionDetailView(DetailView):

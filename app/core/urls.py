@@ -8,6 +8,7 @@ urlpatterns = [
 
     path('wallets/', views.WalletListView.as_view(), name='wallet.list'),
     path('wallet/<uuid:pk>/', views.WalletDetailView.as_view(), name='wallet.read'),
+    path('wallet/<uuid:pk>/consolidate/', views.WalletConsolidateView.as_view(), name='wallet.consolidate'),
 
     path('assets/', views.AssetListView.as_view(), name='asset.list'),
     path('asset/<uuid:pk>/', views.AssetDetailView.as_view(), name='asset.read'),

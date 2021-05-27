@@ -37,4 +37,28 @@ $(document).ready(function() {
   }));
 
   updateTxFee();
+
+  // --------------------------------------------------------------------------
+  $('#consolidate-utxos-form').on('submit', function(e) {
+    var password = window.prompt('Enter wallet spending password');
+    if (password) {
+      var form = e.target;
+      $.ajax({
+        url: form.action,
+        method: 'post',
+        data: {
+          consolidate_tokens_password: password
+        },
+        headers: {
+          "X-CSRFToken": form.csrfmiddlewaretoken.value
+        }
+      }).done(function(responseData) {
+        window.location.href = responseData.transaction_url;
+      }).fail(function(xhr) {
+        window.alert(xhr.responseJSON.error);
+      });
+    }
+
+    return false;
+  });
 });

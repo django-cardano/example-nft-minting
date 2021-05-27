@@ -128,3 +128,7 @@ class MintNFTForm(forms.Form):
         ),
         required=False,
     )
+
+
+class ConsolidateTokensForm(forms.Form):
+    consolidate_tokens_password = forms.CharField(widget=forms.HiddenInput)

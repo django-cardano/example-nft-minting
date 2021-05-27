@@ -34,19 +34,40 @@
 {% endblock %}
 
 {% block header_content %}
-<div class="flex items-center">
-  <i class="fas fa-wallet text-8xl text-green-700 mr-4"></i>
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex items-center">
+      <i class="fas fa-wallet text-8xl text-green-700 mr-4"></i>
+      <div>
+        <h1 class="text-3xl text-gray-900 font-semibold tracking-wide">
+          {{ wallet.name }}
+        </h1>
+        <p class="text-base text-gray-900">
+          ₳ {{ wallet.lovelace_balance|toada|floatformat:6 }}
+        </p>
+      </div>
+    </div>
 
-  <div class="flex-grow">
-    <h1 class="text-3xl text-gray-900 font-semibold tracking-wide">
-      {{ wallet.name }}
-    </h1>
-
-    <p class="text-base text-gray-900">
-      ₳ {{ wallet.lovelace_balance|toada|floatformat:6 }}
-    </p>
+    <form
+      action="{{ request.path }}consolidate/"
+      id="consolidate-utxos-form"
+      method="post"
+      class="mt-4 sm:mt-0 sm:mx-4"
+    >
+      {% csrf_token %}
+      {{ consolidate_tokens_form }}
+      <button
+        type="submit"
+        class="
+          rounded-md border border-transparent shadow-sm
+          px-4 py-2 w-full
+          bg-green-700 hover:bg-green-800
+          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-800
+          text-base font-medium text-white
+        ">
+        Consolidate UTxOs
+      </button>
+    </form>
   </div>
-</div>
 {% endblock %}
 
 {% block content %}
