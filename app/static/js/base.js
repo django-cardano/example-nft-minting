@@ -8,6 +8,6 @@ $(document).ready(function() {
       });
   }
 
-  // setInterval(queryTip, 5000);
+  setInterval(queryTip, 30000);
   queryTip();
 });
