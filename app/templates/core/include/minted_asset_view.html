@@ -1,0 +1,26 @@
+<div class="flex flex-col md:flex-row">
+  <section class="md:flex-1">
+    {% include 'core/include/asset_card.html' %}
+  </section>
+
+  <section class="mt-8 md:w-96 md:mt-0 md:ml-8">
+    <dl>
+      {% with asset.minting_policy as policy %}
+      <dt class="font-semibold">Minting Policy</dt>
+      <dd>{{ policy.name }}</dd>
+      {% endwith %}
+
+      {% with asset.minting_transaction as tx %}
+      <dt class="font-semibold mt-4">Minting Transaction:</dt>
+      <dd class="break-all">
+        <a
+          class="break-all hover:underline"
+          href="{% url 'transaction.read' tx.tx_id %}"
+        >
+          <i class="fas fa-link mr-1"></i> {{ tx.tx_id }}
+        </a>
+      </dd>
+      {% endwith %}
+    </dl>
+  </section>
+</div>

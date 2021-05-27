@@ -61,11 +61,11 @@
 
 
 {% block content %}
-  <main>
+  <main class="mt-6">
     {% if asset.minting_transaction %}
-      Asset + transaction view
+      {% include 'core/include/minted_asset_view.html' %}
     {% else %}
-      {% include 'core/include/mint_nft_view.html' %}
+      {% include 'core/include/unminted_asset_view.html' %}
     {% endif %}
   </main>
 {% endblock %}
