@@ -68,14 +68,14 @@ class MintingPolicyAdmin(admin.ModelAdmin):
         if obj:
             return self.fields
 
-        return ('name', 'password', 'valid_before_slot',)
+        return ('name', 'password', 'invalid_hereafter',)
 
     def get_changeform_initial_data(self, request):
         initial_data = super().get_changeform_initial_data(request)
 
         tip = CardanoUtils.query_tip()
         current_slot = tip['slot']
-        initial_data['valid_before_slot'] = current_slot + 1000000
+        initial_data['invalid_hereafter'] = current_slot + 1000000
 
         return initial_data
 

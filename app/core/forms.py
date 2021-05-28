@@ -31,11 +31,11 @@ class WalletCreateForm(forms.ModelForm):
 class MintingPolicyCreateForm(forms.ModelForm):
     name = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
-    valid_before_slot = forms.IntegerField()
+    invalid_hereafter = forms.IntegerField()
 
     class Meta:
         model = MintingPolicy
-        fields = ('name', 'password', 'valid_before_slot',)
+        fields = ('name', 'password', 'invalid_hereafter',)
 
 
 class TransferADAForm(forms.Form):
